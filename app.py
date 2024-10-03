@@ -39,8 +39,8 @@ if not os.path.exists("temp"):
 # Subheader and paragraph with custom font
 st.markdown('<p class="title-font">La corta historia de un pequeño fantasma</p>', unsafe_allow_html=True)
 st.markdown('<p class="paragraph-font">¡Si que hace frío! De seguro que la leona está dormida, como no le gusta el frío.- exclamó el fantasma. '
-            'Flotaba sobre la mesa del comedor, pensando en qué hacer. Antes de que se diera cuenta, sus dedos no se movían, eso debido '
-            'a ser congelados por el frío tan duro que atormentaba a todos. "... Bueno, ya ni modo." - tomó un tamaño pequeño, agarró un '
+            'Flotaba sobre la mesa del comedor, pensando en qué hacer. Antes de que se diera cuenta, sus dedos no se movían, eso muy posiblemente '
+            'paso al ser congelados por el frío tan duro que atormentaba a todos. "... Bueno, ya ni modo." - tomó un tamaño pequeño, agarró un '
             'pañuelo cercano y se acostó en una taza para dormir plácidamente hasta la mañana.</p>', unsafe_allow_html=True)
 
 # Text input and language selection
