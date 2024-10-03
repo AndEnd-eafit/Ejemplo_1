@@ -90,8 +90,3 @@ def remove_files(n):
     for f in mp3_files:
         if os.stat(f).st_mtime < now - n_days:
             os.remove(f)
-
-                print("Deleted ", f)
-
-
-remove_files(7)
