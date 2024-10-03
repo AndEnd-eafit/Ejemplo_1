@@ -2,93 +2,95 @@ import streamlit as st
 import os
 import time
 import glob
-import os
 from gtts import gTTS
 from PIL import Image
 import base64
 
-st.title("Conversión de Texto a Audio")
+# Custom CSS for fonts
+st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lexend:wght@600&display=swap');
+    .title-font {
+        font-family: 'Lexend', sans-serif;
+        font-size: 36px;
+    }
+    .paragraph-font {
+        font-family: 'Inter', sans-serif;
+        font-size: 18px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Title with custom font
+st.markdown('<p class="title-font">Conversión de Texto a Audio</p>', unsafe_allow_html=True)
+
+# Display image
 image = Image.open('gato_raton.png')
 st.image(image, width=350)
+
+# Sidebar text
 with st.sidebar:
-    st.subheader("Esrcibe y/o selecciona texto para ser escuchado.")
+    st.subheader("Escribe y/o selecciona texto para ser escuchado.")
 
-
-try:
+# Create temp directory if not exists
+if not os.path.exists("temp"):
     os.mkdir("temp")
-except:
-    pass
 
-st.subheader("Una pequeña Fábula.")
-st.write('¡Ay! -dijo el ratón-. El mundo se hace cada día más pequeño. Al principio era tan grande que le tenía miedo. '  
-         ' Corría y corría y por cierto que me alegraba ver esos muros, a diestra y siniestra, en la distancia. ' 
-         ' Pero esas paredes se estrechan tan rápido que me encuentro en el último cuarto y ahí en el rincón está '  
-         ' la trampa sobre la cual debo pasar. Todo lo que debes hacer es cambiar de rumbo dijo el gato...y se lo comió. ' 
-         '  '
-         ' Franz Kafka.'
-        
-        )
-           
-st.markdown(f"Quieres escucharlo?, copia el texto")
-text = st.text_area("Ingrese El texto a escuchar.")
+# Subheader and paragraph with custom font
+st.markdown('<p class="title-font">La corta historia de un pequeño fantasma</p>', unsafe_allow_html=True)
+st.markdown('<p class="paragraph-font">¡Si que hace frío! De seguro que la leona está dormida, como no le gusta el frío.- exclamó el fantasma. '
+            'Flotaba sobre la mesa del comedor, pensando en qué hacer. Antes de que se diera cuenta, sus dedos no se movían, eso debido '
+            'a ser congelados por el frío tan duro que atormentaba a todos. "... Bueno, ya ni modo." - tomó un tamaño pequeño, agarró un '
+            'pañuelo cercano y se acostó en una taza para dormir plácidamente hasta la mañana.</p>', unsafe_allow_html=True)
 
-tld='com'
-option_lang = st.selectbox(
-    "Selecciona el lenguaje",
-    ("Español", "English"))
-if option_lang=="Español" :
-    lg='es'
-if option_lang=="English" :
-    lg='en'
+# Text input and language selection
+st.markdown("¿Quieres escucharlo? Copia el texto a continuación:")
+text = st.text_area("Ingrese el texto a escuchar.")
+languages = {
+    "Español": 'es',
+    "Inglés": 'en',
+    "Ruso": 'ru',
+    "Japonés": 'ja',
+    "Italiano": 'it'
+}
 
-def text_to_speech(text, tld,lg):
-    
-    tts = gTTS(text,lang=lg) # tts = gTTS(text,'en', tld, slow=False)
-    try:
-        my_file_name = text[0:20]
-    except:
-        my_file_name = "audio"
+option_lang = st.selectbox("Selecciona el lenguaje", list(languages.keys()))
+lg = languages[option_lang]
+
+# Text-to-speech function
+def text_to_speech(text, lg):
+    tts = gTTS(text, lang=lg)
+    my_file_name = text[:20] if len(text) > 20 else "audio"
     tts.save(f"temp/{my_file_name}.mp3")
     return my_file_name, text
 
+# Convert text to audio
+if st.button("Convertir a Audio"):
+    if text:
+        result, output_text = text_to_speech(text, lg)
+        audio_file = open(f"temp/{result}.mp3", "rb")
+        audio_bytes = audio_file.read()
+        st.markdown(f"## Tu audio:")
+        st.audio(audio_bytes, format="audio/mp3", start_time=0)
 
-#display_output_text = st.checkbox("Verifica el texto")
+        # Download link for the audio file
+        with open(f"temp/{result}.mp3", "rb") as f:
+            data = f.read()
+        def get_binary_file_downloader_html(bin_file, file_label='File'):
+            bin_str = base64.b64encode(data).decode()
+            href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
+            return href
+        st.markdown(get_binary_file_downloader_html(f"temp/{result}.mp3", file_label="Audio File"), unsafe_allow_html=True)
 
-if st.button("convertir a Audio"):
-     result, output_text = text_to_speech(text, 'com',lg)#'tld
-     audio_file = open(f"temp/{result}.mp3", "rb")
-     audio_bytes = audio_file.read()
-     st.markdown(f"## Tú audio:")
-     st.audio(audio_bytes, format="audio/mp3", start_time=0)
-
-     #if display_output_text:
-     
-     #st.write(f" {output_text}")
-    
-#if st.button("ElevenLAabs",key=2):
-#     from elevenlabs import play
-#     from elevenlabs.client import ElevenLabs
-#     client = ElevenLabs(api_key="a71bb432d643bbf80986c0cf0970d91a", # Defaults to ELEVEN_API_KEY)
-#     audio = client.generate(text=f" {output_text}",voice="Rachel",model="eleven_multilingual_v1")
-#     audio_file = open(f"temp/{audio}.mp3", "rb")
-
-     with open(f"temp/{result}.mp3", "rb") as f:
-         data = f.read()
-
-     def get_binary_file_downloader_html(bin_file, file_label='File'):
-        bin_str = base64.b64encode(data).decode()
-        href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
-        return href
-     st.markdown(get_binary_file_downloader_html("audio.mp3", file_label="Audio File"), unsafe_allow_html=True)
-
+# Function to remove old files
 def remove_files(n):
-    mp3_files = glob.glob("temp/*mp3")
-    if len(mp3_files) != 0:
-        now = time.time()
-        n_days = n * 86400
-        for f in mp3_files:
-            if os.stat(f).st_mtime < now - n_days:
-                os.remove(f)
+    mp3_files = glob.glob("temp/*.mp3")
+    now = time.time()
+    n_days = n * 86400
+    for f in mp3_files:
+        if os.stat(f).st_mtime < now - n_days:
+            os.remove(f)
+
                 print("Deleted ", f)
 
 
