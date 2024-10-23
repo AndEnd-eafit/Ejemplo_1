@@ -25,7 +25,7 @@ st.markdown("""
 st.markdown('<p class="title-font">Conversión de Texto a Audio</p>', unsafe_allow_html=True)
 
 # Display image
-image = Image.open('gato_raton.png')
+image = Image.open('Yoru - Taza.png')
 st.image(image, width=350)
 
 # Sidebar text
@@ -40,8 +40,8 @@ if not os.path.exists("temp"):
 st.markdown('<p class="title-font">La corta historia de un pequeño fantasma</p>', unsafe_allow_html=True)
 st.markdown('<p class="paragraph-font">¡Si que hace frío! De seguro que la leona está dormida, como no le gusta el frío.- exclamó el fantasma. '
             'Flotaba sobre la mesa del comedor, pensando en qué hacer. Antes de que se diera cuenta, sus dedos no se movían, eso muy posiblemente '
-            'paso al ser congelados por el frío tan duro que atormentaba a todos. "... Bueno, ya ni modo." - tomó un tamaño pequeño, agarró un '
-            'pañuelo cercano y se acostó en una taza para dormir plácidamente hasta la mañana.</p>', unsafe_allow_html=True)
+            'paso al ser congelados por el frío tan duro que atormentaba a todos. "... Bueno, ya ni modo." - tomó un tamaño pequeño, agarró unas '
+            'esponjas cercanas y se acostó en una taza para dormir plácidamente hasta la mañana.</p>', unsafe_allow_html=True)
 
 # Text input and language selection
 st.markdown("¿Quieres escucharlo? Copia el texto a continuación:")
